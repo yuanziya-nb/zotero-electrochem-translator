@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Electrochem Translator Settings</title>
+  <style>
+    body { font: 14px sans-serif; max-width: 480px; margin: 20px auto; }
+    label { display: block; margin-top: 14px; font-weight: 600; }
+    input, textarea { width: 100%; box-sizing: border-box; margin-top: 5px; padding: 8px; }
+    textarea { height: 220px; font-family: monospace; }
+    button { margin-top: 16px; padding: 8px 14px; }
+    small { color: #666; }
+  </style>
+</head>
+<body>
+  <h2>Electrochem Translator Settings</h2>
+  <label>Lingva instance URL</label>
+  <input id="lingva" value="https://lingva.ml">
+  <small>Free primary service. Lingva instances are community-hosted and may change.</small>
+
+  <label>LibreTranslate endpoint</label>
+  <input id="libre" value="https://libretranslate.com/translate">
+  <small>Used as a fallback when Lingva is unavailable.</small>
+
+  <label>Custom electrochemistry terms (JSON)</label>
+  <textarea id="terms" spellcheck="false">{"cathode": "阴极", "anode": "阳极"}</textarea>
+
+  <button id="save">Save</button>
+  <div id="status"></div>
+  <script>
+    const prefPrefix = 'extensions.electrochem-translator.';
+    function get(key, fallback) {
+      try { return Services.prefs.getCharPref(prefPrefix + key); } catch (_) { return fallback; }
+    }
+    document.getElementById('lingva').value = get('lingvaInstance', 'https://lingva.ml');
+    document.getElementById('libre').value = get('libreEndpoint', 'https://libretranslate.com/translate');
+    document.getElementById('terms').value = get('customTerms', '{}');
+    document.getElementById('save').onclick = () => {
+      try {
+        JSON.parse(document.getElementById('terms').value);
+        Services.prefs.setCharPref(prefPrefix + 'lingvaInstance', document.getElementById('lingva').value.trim());
+        Services.prefs.setCharPref(prefPrefix + 'libreEndpoint', document.getElementById('libre').value.trim());
+        Services.prefs.setCharPref(prefPrefix + 'customTerms', document.getElementById('terms').value.trim());
+        document.getElementById('status').textContent = 'Saved.';
+      } catch (error) {
+        document.getElementById('status').textContent = 'Invalid JSON: ' + error.message;
+      }
+    };
+  </script>
+</body>
+</html>

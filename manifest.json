@@ -1,0 +1,15 @@
+{
+  "manifest_version": 2,
+  "name": "Electrochem English-Chinese Translator",
+  "version": "1.0.0",
+  "description": "Free English-to-Chinese translator for Zotero, with electrochemistry terminology support.",
+  "homepage_url": "https://github.com/yuanziya-nb/zotero-electrochem-translator",
+  "applications": {
+    "zotero": {
+      "id": "electrochem-translator@yuanziya-nb.github.io",
+      "update_url": "https://yuanziya-nb.github.io/zotero-electrochem-translator/update.json",
+      "strict_min_version": "7.0",
+      "strict_max_version": "7.*"
+    }
+  }
+}
